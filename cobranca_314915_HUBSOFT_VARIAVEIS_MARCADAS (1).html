@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!--
+============================================================
+MAPA DE VARIÁVEIS HUBSOFT - BOLETO DINÂMICO
+============================================================
+ATENÇÃO:
+Os nomes [[VAR_...]] abaixo são MARCADORES DE TRABALHO.
+Eles NÃO são os nomes oficiais das variáveis do HubSoft.
+
+Quando você obtiver a lista de variáveis do seu HubSoft,
+substitua cada marcador pelo nome oficial correspondente.
+
+1) IDENTIFICAÇÃO
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA IDENTIFICAÇÃO DA COBRANÇA -->
+[[VAR_NUMERO_COBRANCA]]        -> identificação da cobrança
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO NÚMERO DA FATURA -->
+[[VAR_NUMERO_FATURA]]          -> número da fatura
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO CONTRATO -->
+[[VAR_NUMERO_CONTRATO]]        -> número do contrato
+
+2) CLIENTE
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO NOME DO CLIENTE -->
+[[VAR_NOME_CLIENTE]]           -> nome/razão do cliente
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO CPF/CNPJ -->
+[[VAR_CPF_CNPJ_CLIENTE]]       -> CPF/CNPJ do cliente
+
+3) EMPRESA
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA RAZÃO SOCIAL -->
+[[VAR_RAZAO_SOCIAL]]           -> razão social da empresa
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO CNPJ -->
+[[VAR_CNPJ_EMPRESA]]           -> CNPJ da empresa
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO E-MAIL -->
+[[VAR_EMAIL_EMPRESA]]          -> e-mail
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO TELEFONE -->
+[[VAR_TELEFONE_EMPRESA]]       -> telefone
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO ENDEREÇO -->
+[[VAR_ENDERECO_EMPRESA]]       -> endereço
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA CIDADE -->
+[[VAR_CIDADE_EMPRESA]]         -> cidade
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO CEP -->
+[[VAR_CEP_EMPRESA]]            -> CEP
+
+4) COBRANÇA
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO VALOR ORIGINAL -->
+[[VAR_VALOR_ORIGINAL]]         -> valor original
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA MULTA -->
+[[VAR_MULTA]]                  -> multa
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO VALOR CORRIGIDO -->
+[[VAR_VALOR_CORRIGIDO]]        -> valor atualizado/corrigido
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO VENCIMENTO -->
+[[VAR_DATA_VENCIMENTO]]        -> vencimento
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DOS JUROS -->
+[[VAR_JUROS]]                  -> juros
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO DESCONTO -->
+[[VAR_DESCONTO_ATE_VENCIMENTO]]-> desconto até vencimento
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO DEMONSTRATIVO -->
+[[VAR_DEMONSTRATIVO_COBRANCA]] -> demonstrativo
+
+5) PAGAMENTO
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO PIX COPIA E COLA -->
+[[VAR_PIX_COPIA_E_COLA]]       -> PIX copia e cola
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO QR CODE PIX -->
+[[VAR_QR_CODE_PIX]]            -> URL/base64/imagem do QR Code
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA LINHA DIGITÁVEL -->
+[[VAR_LINHA_DIGITAVEL]]        -> linha digitável
+
+6) DOCUMENTO
+   <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO LINK DA FATURA -->
+[[VAR_LINK_FATURA_ORIGINAL]]   -> link da fatura original
+
+IMPORTANTE:
+- Não altere CSS/estrutura apenas para trocar variáveis.
+- Não invente nomes oficiais do HubSoft.
+- O QR Code e a linha digitável são campos especialmente
+  importantes porque também alimentam o comportamento do JS.
+============================================================
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- HUBSOFT: NÚMERO/IDENTIFICAÇÃO DA COBRANÇA --><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA IDENTIFICAÇÃO DA COBRANÇA -->
+[[VAR_NUMERO_COBRANCA]]</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:#f8f9fa;color:#212529}
+body{display:flex;align-items:center}
+.container{width:100%;padding:48px 20px}
+.grid{display:grid;grid-template-columns:minmax(300px,520px) minmax(300px,520px);gap:24px;justify-content:center}
+.card{background:#fff;border-radius:10px;box-shadow:0 .5rem 1rem rgba(0,0,0,.15);height:100%;overflow:hidden}
+.banner{background:#0d6efd;color:#fff;min-height:120px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.banner h4{margin:0;font-size:1.25rem;line-height:1.4}
+.body{padding:24px}
+.floating{display:flex;justify-content:center;align-items:center;margin:-4px auto 20px;background:#fff;border-radius:10px;width:180px;height:180px;box-shadow:0 .25rem .75rem rgba(0,0,0,.12)}
+.floating img{max-width:80%;max-height:80%}
+textarea{width:100%;resize:none;border:1px solid #ced4da;border-radius:6px;padding:10px;font:14px monospace;background:#fff}
+.center{text-align:center}
+.btn{display:inline-block;border:0;border-radius:5px;padding:7px 12px;font-size:14px;cursor:pointer;background:#0d6efd;color:#fff}
+.btn.success{background:#198754}
+.barcode{width:100%;height:70px;margin-top:18px;display:flex;align-items:stretch;overflow:hidden}
+.barcode span{display:block;height:100%}
+.muted{color:#6c757d;font-size:14px;margin:0 0 7px}
+.value{font-size:16px;font-weight:700;margin:0 0 18px;word-break:break-word}
+.title{font-size:24px;font-weight:700;margin:0 0 20px}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+hr{border:0;border-top:1px solid #dee2e6;margin:22px 0}
+a.btn{text-decoration:none}
+@media(max-width:900px){.grid{grid-template-columns:1fr;max-width:600px;margin:auto}}
+@media(max-width:520px){.container{padding:20px 12px}.body{padding:18px}.columns{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="grid">
+
+<section class="card">
+  <div class="banner"><h4>Utilize uma das formas disponibilizadas abaixo para realizar o pagamento</h4></div>
+  <div class="body">
+    <div class="floating">
+      <img src="<!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO QR CODE PIX -->
+[[VAR_QR_CODE_PIX]]" alt="QR Code PIX">
+    </div>
+
+    <textarea id="pix" rows="3" readonly><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO PIX COPIA E COLA -->
+[[VAR_PIX_COPIA_E_COLA]]</textarea>
+    <div class="center" style="margin-top:16px">
+      <button class="btn" id="copyPix">Copiar PIX Copia e Cola</button>
+    </div>
+
+    <div id="barcode" class="barcode" aria-label="Código de barras"></div>
+    <p class="center muted" id="linha"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA LINHA DIGITÁVEL -->
+[[VAR_LINHA_DIGITAVEL]]</p>
+    <div class="center" style="margin-top:16px">
+      <button class="btn" id="copyLinha">Copiar Linha Digitável</button>
+    </div>
+
+    <p class="muted center" style="margin-top:28px">Devido por</p>
+    <p class="value center"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO NOME DO CLIENTE -->
+[[VAR_NOME_CLIENTE]]</p>
+    <p class="muted center">CPF/CNPJ</p>
+    <p class="value center"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO CPF/CNPJ -->
+[[VAR_CPF_CNPJ_CLIENTE]]</p>
+  </div>
+</section>
+
+<section class="card">
+  <div class="body">
+    <p class="muted">Razão Social</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA RAZÃO SOCIAL -->
+[[VAR_RAZAO_SOCIAL]]</p>
+    <p class="muted">CNPJ</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO CNPJ -->
+[[VAR_CNPJ_EMPRESA]]</p>
+    <p class="muted">E-mail</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO E-MAIL -->
+[[VAR_EMAIL_EMPRESA]]</p>
+    <p class="muted">Telefone</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO TELEFONE -->
+[[VAR_TELEFONE_EMPRESA]]</p>
+    <p class="muted">Endereço</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO ENDEREÇO -->
+[[VAR_ENDERECO_EMPRESA]]</p>
+    <p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA CIDADE -->
+[[VAR_CIDADE_EMPRESA]]</p>
+    <p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO CEP -->
+[[VAR_CEP_EMPRESA]]</p>
+
+    <hr>
+    <p class="title">Dados da cobrança</p>
+    <div class="columns">
+      <div>
+        <p class="muted">Fatura</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO NÚMERO DA FATURA -->
+[[VAR_NUMERO_FATURA]]</p>
+        <p class="muted">Valor original</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO VALOR ORIGINAL -->
+[[VAR_VALOR_ORIGINAL]]</p>
+        <p class="muted">Multa</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA MULTA -->
+[[VAR_MULTA]]</p>
+        <p class="muted">Valor corrigido</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO VALOR CORRIGIDO -->
+[[VAR_VALOR_CORRIGIDO]]</p>
+      </div>
+      <div>
+        <p class="muted">Contrato</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO CONTRATO -->
+[[VAR_NUMERO_CONTRATO]]</p>
+        <p class="muted">Vencimento</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO VENCIMENTO -->
+[[VAR_DATA_VENCIMENTO]]</p>
+        <p class="muted">Juros</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DOS JUROS -->
+[[VAR_JUROS]]</p>
+        <p class="muted">Desconto até o vencimento</p><p class="value"><!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO DESCONTO -->
+[[VAR_DESCONTO_ATE_VENCIMENTO]]</p>
+      </div>
+    </div>
+
+    <hr>
+    <p class="title">Informações adicionais</p>
+    <p class="muted">Demonstrativo</p>
+    <p class="value">Referente ao Acesso a Internet via Fibra de 13/02/2026 a <!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO VENCIMENTO -->
+[[VAR_DATA_VENCIMENTO]]</p>
+    <a class="btn" href="http://45.6.90.2/boleto/<!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DO NÚMERO DA FATURA -->
+[[VAR_NUMERO_FATURA]]-HB7YMOXY3R/" target="_blank" rel="noopener">Fatura Original</a>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script>
+// Comportamento de cópia equivalente ao arquivo fornecido.
+function copyWithFeedback(button, value, original) {
+  navigator.clipboard.writeText(value).then(() => {
+    button.textContent = "Copiado!";
+    button.classList.add("success");
+    setTimeout(() => {
+      button.textContent = original;
+      button.classList.remove("success");
+    }, 3000);
+  });
+}
+document.getElementById("copyPix").onclick = function() {
+  copyWithFeedback(this, document.getElementById("pix").value, "Copiar PIX Copia e Cola");
+};
+document.getElementById("copyLinha").onclick = function() {
+  copyWithFeedback(this, document.getElementById("linha").textContent.trim(), "Copiar Linha Digitável");
+};
+
+// Renderização simples do código de barras a partir da sequência encontrada no HTML original.
+// Mantém a página totalmente independente de boleto.js.
+// HUBSOFT: substituir pelo nome REAL da variável de linha digitável.
+const pattern = "<!-- HUBSOFT: SUBSTITUIR PELA VARIÁVEL OFICIAL DA LINHA DIGITÁVEL -->
+[[VAR_LINHA_DIGITAVEL]]";
+const barcode = document.getElementById("barcode");
+let seed = 17;
+for (let i=0; i<pattern.length; i++) {
+  const n = Number(pattern[i]);
+  const black = document.createElement("span");
+  const white = document.createElement("span");
+  black.style.width = (4 + (n % 2) * 4) + "px";
+  white.style.width = (4 + ((n + seed) % 2) * 4) + "px";
+  black.style.background = "#000";
+  white.style.background = "#fff";
+  barcode.appendChild(black);
+  barcode.appendChild(white);
+  seed = (seed + n) % 10;
+}
+</script>
+</body>
+</html>
